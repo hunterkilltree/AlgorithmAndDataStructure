@@ -110,7 +110,7 @@ void mergeSort(int arr[], int left, int right) {
 }
 
 void MergeSort(int arr[], int n) {
-    mergeSort(arr, 0, n);
+    mergeSort(arr, 0, n - 1);
 }
 
 int partion(int arr[], int left, int right ) {
