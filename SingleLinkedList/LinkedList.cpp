@@ -8,7 +8,7 @@ using namespace std;
 //list1.size : show the size of the list
 //list1.empty()
 //list1.delete_at(pos): delete at poistion
-
+//list1.reverse(): reverse the order
 
 //not yet
 //back() : return a reference to last element in the list
@@ -18,7 +18,6 @@ using namespace std;
 //list1.pop_back() : remove the last element, return value
 //list1.pop_front(): remove the first element, return value
 //list1.push_front(x): add inserts an element with value x at the beginning
-//list1.reverse(): reverse the order
 //list1.swap(list2): swap 2 list . note: they can have different size.
 //list1.unique(): remove any the element that has the same value as the element before it.
 
@@ -262,6 +261,28 @@ public:
         }
     }
 
+    void reverse() {
+        if (this->head && this->head->next) {
+            Node *previousNode = NULL;
+            Node *currentNode = this->head;
+            Node *nextNode = this->head->next;
+
+            while(nextNode != NULL) {
+                this->head = nextNode;
+
+                currentNode->next = previousNode;
+
+                previousNode = currentNode;
+
+                currentNode = nextNode;
+
+                nextNode = nextNode->next;
+
+            }
+            currentNode->next = previousNode;
+        }
+    }
+
 };
 
 int main() {
@@ -275,6 +296,10 @@ int main() {
     cout << "List: "; a.print();
     cout << "Delete at index 0: ";
     a.delete_at(0);
+    a.print();
+
+    cout << "Reverse the list: ";
+    a.reverse();
     a.print();
 
 
