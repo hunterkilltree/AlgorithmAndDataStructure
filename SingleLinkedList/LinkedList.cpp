@@ -9,17 +9,19 @@ using namespace std;
 //list1.empty()
 //list1.delete_at(pos): delete at poistion
 //list1.reverse(): reverse the order
+//list1.insert(pos, val) : insert at position with a specific value
+//list1.search(val) : finding the value in your list
+//list1.push_front(x): add inserts an element with value x at the beginning
 
 //not yet
 //back() : return a reference to last element in the list
 //font() : retrun a reference to the first element in the list
-//insert(pos, val) : insert at position with a specific value
 //list1.merge(list2) : list 1 and list 2 already sorted => then merge to a sorted list1
 //list1.pop_back() : remove the last element, return value
 //list1.pop_front(): remove the first element, return value
-//list1.push_front(x): add inserts an element with value x at the beginning
 //list1.swap(list2): swap 2 list . note: they can have different size.
 //list1.unique(): remove any the element that has the same value as the element before it.
+//list1.sort() : sort the list by moving pointer instead of coping or swapping the contents.
 
 
 
@@ -112,7 +114,6 @@ public:
             cout << p->value << " ";
             p = p -> next;
         }
-
         cout << '\n';
     }
 
@@ -138,7 +139,6 @@ public:
             if (i == pos) {
                 return p;
             }
-
             p = p->next;
             i++;
         }
@@ -147,27 +147,13 @@ public:
 
     bool isCircular() {
         if (this->is_empty())
-        return 0;
+            return 0;
 
         Node* tail = head->next;
-
         while(tail) {
             if (tail == head)
             return true;
             tail = tail->next;
-        }
-    }
-
-    void addAtHead(int val) {
-        if( head == NULL) {
-            head =  new Node(val);
-            count++;
-        }
-        else {
-            Node *node = new Node(val);
-            node->next = head;
-            head = node;
-            count++;
         }
     }
 
@@ -184,36 +170,6 @@ public:
             i++;
         }
         return -1;
-    }
-
-    void addAtIndex(int index, int val) {
-        if (index < 0 || index > count)
-            return;
-        Node *node = new Node(val);
-        Node *p = head;
-        if (index == count) {
-            addAtTail(val);
-            return;
-        }
-        if (index == 0) {
-            head = node;
-            return;
-        }
-
-        Node *pPre = NULL;
-        int i = 0;
-
-        while(p) {
-            if (index == i) {
-                node->next = p;
-                pPre->next = node;
-                return;
-            }
-            i++;
-            pPre = p;
-            p = p->next;
-        }
-
     }
 
     void delete_at(int index) {
@@ -244,23 +200,6 @@ public:
         }
     }
 
-    void addAtTail(int val) {
-        if(head == NULL) {
-            head = new Node(val);
-            count++;
-        }
-        else {
-            Node *p = this->head;
-            while(p->next) {
-                p = p->next;
-            }
-
-
-            p->next = new Node(val);
-            count++;
-        }
-    }
-
     void reverse() {
         if (this->head && this->head->next) {
             Node *previousNode = NULL;
@@ -283,6 +222,63 @@ public:
         }
     }
 
+
+
+    void push_front(int val) {
+        if( head == NULL) {
+            head =  new Node(val);
+            count++;
+        }
+        else {
+            Node *node = new Node(val);
+            node->next = head;
+            head = node;
+            count++;
+        }
+    }
+
+    void insert(int index, int val) {
+        if (index < 0 || index > count)
+            return;
+
+        Node *node = new Node(val);
+        Node *p = head;
+        if (index == count) {
+            push_back(val);
+            return;
+        }
+
+        if (index == 0) {
+            push_front(val);
+            return;
+        }
+
+        Node *pPre = NULL;
+        int i = 0;
+
+        while(p) {
+            if (index == i) {
+                node->next = p;
+                pPre->next = node;
+                return;
+            }
+            i++;
+            pPre = p;
+            p = p->next;
+        }
+    }
+
+    bool search(int val) {
+        Node *p = head;
+
+        while(p) {
+            if(p->value  == val)
+                return 1;
+            p = p->next;
+        }
+        return 0;
+    }
+
 };
 
 int main() {
@@ -301,7 +297,8 @@ int main() {
     cout << "Reverse the list: ";
     a.reverse();
     a.print();
-
+    cout << "Is 1 existing :";
+    a.search(1) ? cout << "yes" : cout << "no";
 
 
     return 0;
