@@ -12,17 +12,18 @@ using namespace std;
 //list1.insert(pos, val) : insert at position with a specific value
 //list1.search(val) : finding the value in your list
 //list1.push_front(x): add inserts an element with value x at the beginning
+//list1.merge(list2) : list 1 and list 2 already sorted => then merge to a sorted list1
 
 //not yet
 //back() : return a reference to last element in the list
 //font() : retrun a reference to the first element in the list
-//list1.merge(list2) : list 1 and list 2 already sorted => then merge to a sorted list1
 //list1.pop_back() : remove the last element, return value
 //list1.pop_front(): remove the first element, return value
 //list1.swap(list2): swap 2 list . note: they can have different size.
 //list1.unique(): remove any the element that has the same value as the element before it.
 //list1.sort() : sort the list by moving pointer instead of coping or swapping the contents.
-
+//list1.union(list2)
+//list1.intersect(list2)
 
 
 class Numberlist {
@@ -279,11 +280,39 @@ public:
         return 0;
     }
 
+    void merge(Numberlist* list) {
+        // if (list != NULL) {
+        //     Node* p = this->head;
+        //     Node* pPre = NULL;
+        //
+        //     while(p != NULL) {
+        //         pPre = p;
+        //         p = p->next;
+        //     }
+        //
+        //     Node *pList = list->head;
+        //
+        //     p->next = pList;
+        //     // while(pList != NULL) {
+        //     //     p = pList->value;
+        //     // }
+        // }
+            Node* p = this->head;
+            while(p->next) {
+                p = p->next;
+            }
+
+            p->next = list->head;
+
+
+    }
+
 };
 
 int main() {
 
     Numberlist a;
+    Numberlist b;
 
     for (int i = 0; i < 10; i++) {
         a.push_back(i);
@@ -298,7 +327,18 @@ int main() {
     a.reverse();
     a.print();
     cout << "Is 1 existing :";
-    a.search(1) ? cout << "yes" : cout << "no";
+    a.search(1) ? cout << "yes\n" : cout << "no\n";
+
+    for (int i = 15; i < 20; i++) {
+        b.push_back(i);
+    }
+    cout << "List b: ";
+    b.print();
+
+    cout << "Merge b into a: ";
+    a.merge(&b);
+    a.print();
+
 
 
     return 0;
