@@ -3,7 +3,9 @@
 
 using namespace std;
 
+// add some recursion function
 //ok
+//list1.isCircular()
 //list1.push_back(x) : insert the element x at the end of the list
 //list1.size : show the size of the list
 //list1.empty()
@@ -13,6 +15,9 @@ using namespace std;
 //list1.search(val) : finding the value in your list
 //list1.push_front(x): add inserts an element with value x at the beginning
 //list1.merge(list2) : list 1 and list 2 already sorted => then merge to a sorted list1
+//list1.rotate(x) : rotate at the position
+
+
 
 //not yet
 //back() : return a reference to last element in the list
@@ -147,15 +152,19 @@ public:
     }
 
     bool isCircular() {
-        if (this->is_empty())
-            return 0;
+        if (head == NULL)
+            return false;
 
-        Node* tail = head->next;
-        while(tail) {
-            if (tail == head)
-            return true;
-            tail = tail->next;
+        Node *slow_p = head;
+        Node *fast_p = head;
+        while (slow_p && fast_p && fast_p->next) {
+            slow_p = slow_p->next;
+            fast_p = fast_p->next->next;
+            if (slow_p == fast_p) {
+                return true;
+            }
         }
+        return false;
     }
 
     int get(int index) {
@@ -281,30 +290,116 @@ public:
     }
 
     void merge(Numberlist* list) {
-        // if (list != NULL) {
-        //     Node* p = this->head;
-        //     Node* pPre = NULL;
-        //
-        //     while(p != NULL) {
-        //         pPre = p;
-        //         p = p->next;
-        //     }
-        //
-        //     Node *pList = list->head;
-        //
-        //     p->next = pList;
-        //     // while(pList != NULL) {
-        //     //     p = pList->value;
-        //     // }
-        // }
-            Node* p = this->head;
-            while(p->next) {
-                p = p->next;
+        Node* p = this->head;
+        while(p->next) {
+            p = p->next;
+        }
+
+        p->next = list->head;
+    }
+
+    void insertInSortedList(int num) {
+
+
+        if (head == NULL || head->value >= num) {
+            head = new Node(num);
+        }
+        else {
+            Node* previousNode = head;
+            Node* nodePtr = head->next;
+
+            while(nodePtr != NULL && nodePtr->value < num) {
+                previousNode = nodePtr;
+                nodePtr = nodePtr->next;
             }
 
-            p->next = list->head;
+            previousNode->next = new Node(num);
+        }
+    }
 
 
+
+
+    int getSizeRec(Node* ptr) {
+        if (ptr == NULL)
+            return 0;
+        return 1 + getSizeRec(ptr->next);
+
+    }
+
+
+    void displayListRec(Node* ptr) {
+        if (ptr != NULL) {
+            std::cout << ptr->value << " ";
+            displayListRec(ptr->next);
+        }
+
+    }
+
+    Node* addRec(Node* ptr, int value) {
+        if (ptr == NULL) {
+            return new Node(value);
+        }
+        else {
+            ptr->next = addRec(ptr->next, value);
+            return ptr;
+        }
+    }
+
+    Node* removeRec(Node* ptr, int value) {
+        if (ptr == NULL) {
+            return NULL;
+        }
+
+        if (ptr->value == value) {
+            Node* tail = ptr->next;
+            delete ptr;
+            return tail;
+        }
+        else {
+            ptr->next = removeRec(ptr->next, value);
+            return ptr;
+        }
+    }
+
+    int getSizeRecursion() {
+        return getSizeRec(head);
+    }
+
+    void displayListRecursion(Node* ptr) {
+        displayListRec(head);
+    }
+
+    void addRecursion(int value) {
+        head = addRec(head, value);
+    }
+
+    void removeRecursion(int value) {
+        head = removeRec(head, value);
+    }
+
+    void rotate(int pos) {
+        Node* p = head;
+        Node* temp = NULL;
+        Node* prev = NULL;
+        int index = 0;
+
+
+        while(p && index != pos) {
+            prev = p;
+            p = p->next;
+            index++;
+        }
+        temp = p;
+        if (p != NULL) {
+            while(p->next != NULL) {
+                p = p->next;
+            }
+            p->next = head;
+            prev->next = NULL;
+
+        }
+        head = temp;
     }
 
 };
@@ -317,8 +412,10 @@ int main() {
     for (int i = 0; i < 10; i++) {
         a.push_back(i);
     }
-    cout << "The size: " << a.size() <<  endl;
+    cout << "The size: " << a.size() << endl;
     cout << "List: "; a.print();
+    a.rotate(5);
+    cout << "Rotate at pos: "; a.print();
     cout << "Delete at index 0: ";
     a.delete_at(0);
     a.print();
@@ -338,8 +435,6 @@ int main() {
     cout << "Merge b into a: ";
     a.merge(&b);
     a.print();
-
-
 
     return 0;
 }
